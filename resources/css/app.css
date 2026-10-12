@@ -1,0 +1,111 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+/* Token dari DESIGN.md. Semua rasio dihitung dengan contrast-check.py, bukan dikira.
+   Dua batasan yang lahir dari hasil hitungan itu:
+   - kuning tidak pernah jadi warna teks (di atas gading cuma 2.17:1)
+   - batas tombol selalu tinta, karena garis di atas kuning cuma 2.42:1 dan
+     kuning-tua di atas gading 2.17:1, dua-duanya di bawah ambang 3:1 */
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-serif: 'Instrument Serif', ui-serif, Georgia, serif;
+
+    --color-kuning: #f6c01e;
+    --color-kuning-tua: #d9a106;
+    --color-tinta: #1a1510;
+    --color-gading: #fbf7ef;
+    --color-kertas: #ffffff;
+    --color-garis: #8a7c64;
+    --color-redup: #6b5f4b;
+    --color-bata: #9e2b1e;
+
+    --radius-input: 4px;
+    --radius-tombol: 6px;
+    --radius-kartu: 10px;
+}
+
+/* Digit selebar sama supaya kolom rupiah dan stok lurus, dan selisih angka
+   kelihatan dari bentuknya. */
+@utility angka {
+    font-variant-numeric: tabular-nums;
+}
+
+@utility btn {
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-tombol border border-tinta
+        px-4 py-2 text-sm font-semibold transition-colors
+        focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-tinta
+        disabled:pointer-events-none disabled:opacity-60;
+}
+
+@utility btn-primary {
+    @apply btn bg-kuning text-tinta hover:bg-kuning-tua;
+}
+
+@utility btn-secondary {
+    @apply btn bg-kertas text-tinta hover:bg-gading;
+}
+
+@utility btn-danger {
+    @apply btn bg-bata text-gading hover:bg-tinta;
+}
+
+@utility card {
+    @apply rounded-kartu border border-garis bg-kertas;
+}
+
+@utility input-field {
+    @apply min-h-11 w-full rounded-input border border-garis bg-kertas px-3 py-2 text-sm text-tinta
+        placeholder:text-redup focus:border-tinta focus:outline-2 focus:outline-offset-0 focus:outline-tinta;
+}
+
+@utility label {
+    @apply mb-1 block text-sm font-medium text-redup;
+}
+
+@utility badge {
+    @apply inline-flex items-center rounded-input border border-garis px-2 py-0.5 text-xs font-medium text-tinta;
+}
+
+@utility badge-bata {
+    @apply badge border-bata bg-bata text-gading;
+}
+
+/* Motif identitas: baris nota. Nama di kiri, angka rata kanan, pemisah putus-putus. */
+@utility nota-row {
+    @apply flex flex-wrap items-baseline justify-between gap-x-3 py-2 text-sm;
+    border-bottom: 1px dashed var(--color-garis);
+
+    &:last-child {
+        border-bottom: 0;
+    }
+}
+
+@layer base {
+    body {
+        background-color: var(--color-gading);
+        color: var(--color-tinta);
+    }
+
+    h1, h2, h3 {
+        font-family: var(--font-serif);
+        font-weight: 400;
+    }
+
+    /* Setiap kolom angka di tabel rata kanan dan tabular, tanpa harus ditandai
+       satu-satu di tiap view. */
+    td.angka, th.angka {
+        font-variant-numeric: tabular-nums;
+        text-align: right;
+    }
+
+    /* Safari masih menggambar segitiga bawaan walau list-style sudah none. */
+    summary::-webkit-details-marker {
+        display: none;
+    }
+
+    dialog::backdrop {
+        background-color: rgb(26 21 16 / 0.6);
+    }
+}
