@@ -43,8 +43,7 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained()->restrictOnDelete();
             $table->unsignedInteger('qty');
             $table->decimal('unit_price', 14, 2);
-            // Harga beli disalin saat transaksi terjadi. Tanpa ini, laporan laba periode
-            // lalu ikut berubah setiap kali harga beli barang diperbarui.
+
             $table->decimal('unit_cost', 14, 2);
             $table->decimal('subtotal', 14, 2);
         });
@@ -55,8 +54,7 @@ return new class extends Migration
             $table->decimal('amount', 14, 2);
             $table->string('note');
             $table->foreignId('sale_id')->nullable()->constrained()->cascadeOnDelete();
-            // Belanja stok ditandai supaya tidak dihitung dua kali di laporan: uangnya
-            // sudah masuk hitungan laba lewat modal barang terjual (unit_cost).
+
             $table->boolean('is_restock')->default(false);
             $table->timestamp('occurred_at');
             $table->timestamps();

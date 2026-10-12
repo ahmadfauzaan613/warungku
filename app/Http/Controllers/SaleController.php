@@ -21,8 +21,6 @@ class SaleController extends Controller
 
     public function store(Request $request)
     {
-        // Baris yang barangnya belum dipilih dibuang dulu, supaya pemilik warung
-        // tidak kena pesan galat hanya karena menyisakan baris kosong.
         $baris = collect($request->input('items', []))
             ->filter(fn ($item) => filled($item['product_id'] ?? null))
             ->values()
@@ -42,8 +40,7 @@ class SaleController extends Controller
 
         $transaksi = DB::transaction(function () use ($data) {
             $transaksi = Sale::create([
-                // Placeholder harus unik: kolom code ber-unique index, jadi nilai
-                // tetap seperti 'sementara' akan bentrok antar transaksi bersamaan.
+
                 'code' => 'tmp-'.Str::uuid(),
                 'total' => 0,
                 'sold_at' => now(),
@@ -52,8 +49,6 @@ class SaleController extends Controller
             $total = '0.00';
 
             foreach ($data['items'] as $item) {
-                // Baris barangnya dikunci sampai transaksi selesai. Tanpa ini, dua
-                // penjualan yang berjalan bersamaan bisa menjual stok yang sama.
                 $barang = Product::whereKey($item['product_id'])->lockForUpdate()->firstOrFail();
 
                 if ($item['qty'] > $barang->stock) {
@@ -69,7 +64,7 @@ class SaleController extends Controller
                     'product_id' => $barang->id,
                     'qty' => $item['qty'],
                     'unit_price' => $barang->selling_price,
-                    // Harga beli disalin saat ini, bukan dibaca ulang nanti.
+
                     'unit_cost' => $barang->purchase_price,
                     'subtotal' => $subtotal,
                 ]);
@@ -77,8 +72,6 @@ class SaleController extends Controller
                 $barang->decrement('stock', $item['qty']);
             }
 
-            // Kode dibentuk setelah id ada, supaya tidak ada dua transaksi berebut
-            // nomor urut yang sama.
             $transaksi->update([
                 'code' => 'TRX-'.$transaksi->sold_at->format('Ymd').'-'.str_pad((string) $transaksi->id, 4, '0', STR_PAD_LEFT),
                 'total' => $total,

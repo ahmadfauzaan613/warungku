@@ -54,8 +54,6 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
-        // Stok sengaja tidak ikut diubah di sini. Satu-satunya pintu penambahan
-        // stok adalah halaman Stok, supaya jumlahnya tidak punya dua sumber.
         $product->update($this->validasi($request, baru: false) + [
             'category_id' => $this->kategoriId($request),
         ]);
@@ -116,8 +114,6 @@ class ProductController extends Controller
             return null;
         }
 
-        // Kategori dibuat sambil jalan dari isian barang. Satu layar CRUD kategori
-        // tersendiri tidak dibutuhkan untuk satu warung.
         return Category::firstOrCreate(['name' => $nama])->id;
     }
 }

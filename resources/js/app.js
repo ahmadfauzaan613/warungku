@@ -1,15 +1,5 @@
-// Tiga perilaku kecil, semuanya progresif: tanpa JavaScript setiap form di
-// aplikasi ini masih bisa dikirim dan server tetap yang menghitung angkanya.
-//
-// 1. Tombol kirim menandai dirinya sedang bekerja. Untuk aplikasi yang dirender
-//    di server, inilah state "sedang memuat" yang nyata.
-// 2. Konfirmasi hapus memakai <dialog> bawaan browser, jadi Escape menutupnya
-//    dan fokus kembali ke tombol pemanggil tanpa kode tambahan.
-// 3. Kasir: tambah dan hapus baris barang, plus total sementara.
-
 const rupiah = new Intl.NumberFormat('id-ID');
 
-// 1. State sedang menyimpan, hanya untuk form yang memintanya.
 document.querySelectorAll('form[data-menyimpan]').forEach((form) => {
     form.addEventListener('submit', () => {
         if (form.dataset.konfirmasi && form.dataset.sudahKonfirmasi !== '1') {
@@ -21,7 +11,6 @@ document.querySelectorAll('form[data-menyimpan]').forEach((form) => {
             return;
         }
 
-        // Ditunda satu tick supaya pengiriman form tidak ikut terhenti.
         setTimeout(() => {
             tombol.disabled = true;
             tombol.setAttribute('aria-busy', 'true');
@@ -30,7 +19,6 @@ document.querySelectorAll('form[data-menyimpan]').forEach((form) => {
     });
 });
 
-// 2. Konfirmasi hapus.
 const dialog = document.querySelector('#dialog-konfirmasi');
 let formTertunda = null;
 
@@ -59,7 +47,6 @@ if (dialog) {
     });
 }
 
-// 3. Baris barang di kasir.
 const daftarBaris = document.querySelector('#baris-barang');
 
 if (daftarBaris) {
@@ -96,7 +83,6 @@ if (daftarBaris) {
 
     const pasang = (baris) => {
         baris.querySelector('[data-hapus-baris]')?.addEventListener('click', () => {
-            // Satu baris harus selalu tersisa, kalau tidak form jadi tidak bisa dipakai.
             if (daftarBaris.querySelectorAll('[data-baris]').length > 1) {
                 baris.remove();
                 hitung();

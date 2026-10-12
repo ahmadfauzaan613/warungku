@@ -3,11 +3,6 @@
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 
-/* Token dari DESIGN.md. Semua rasio dihitung dengan contrast-check.py, bukan dikira.
-   Dua batasan yang lahir dari hasil hitungan itu:
-   - kuning tidak pernah jadi warna teks (di atas gading cuma 2.17:1)
-   - batas tombol selalu tinta, karena garis di atas kuning cuma 2.42:1 dan
-     kuning-tua di atas gading 2.17:1, dua-duanya di bawah ambang 3:1 */
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
     --font-serif: 'Instrument Serif', ui-serif, Georgia, serif;
@@ -26,8 +21,6 @@
     --radius-kartu: 10px;
 }
 
-/* Digit selebar sama supaya kolom rupiah dan stok lurus, dan selisih angka
-   kelihatan dari bentuknya. */
 @utility angka {
     font-variant-numeric: tabular-nums;
 }
@@ -72,7 +65,6 @@
     @apply badge border-bata bg-bata text-gading;
 }
 
-/* Motif identitas: baris nota. Nama di kiri, angka rata kanan, pemisah putus-putus. */
 @utility nota-row {
     @apply flex flex-wrap items-baseline justify-between gap-x-3 py-2 text-sm;
     border-bottom: 1px dashed var(--color-garis);
@@ -93,14 +85,11 @@
         font-weight: 400;
     }
 
-    /* Setiap kolom angka di tabel rata kanan dan tabular, tanpa harus ditandai
-       satu-satu di tiap view. */
     td.angka, th.angka {
         font-variant-numeric: tabular-nums;
         text-align: right;
     }
 
-    /* Safari masih menggambar segitiga bawaan walau list-style sudah none. */
     summary::-webkit-details-marker {
         display: none;
     }

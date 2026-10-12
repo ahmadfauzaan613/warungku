@@ -18,7 +18,6 @@
         </div>
     @else
         <div class="mt-6 grid items-start gap-6 lg:grid-cols-[3fr_2fr]">
-            {{-- Isi utama: yang harus dibelanjakan. --}}
             <section class="card overflow-hidden">
                 <h2 class="border-b border-garis bg-kuning px-4 py-3 text-lg leading-none">
                     Barang hampir habis

@@ -34,8 +34,6 @@
         </div>
     @else
         <div class="mt-6 grid items-start gap-6 lg:grid-cols-2">
-            {{-- Dua pertanyaan yang berbeda, jadi dipisah. Kalau digabung jadi satu
-                 angka, belanja stok akan terhitung dua kali. --}}
             <section class="card p-5">
                 <h2 class="text-lg leading-none">Hasil penjualan</h2>
                 <p class="mt-1 text-sm text-redup">Dihitung dari barang yang benar-benar terjual.</p>

@@ -7,7 +7,6 @@
         <a href="{{ route('transaksi.index') }}" class="btn-secondary">Kembali ke riwayat</a>
     </div>
 
-    {{-- Bentuk nota: nama di kiri, angka rata kanan. --}}
     <section class="card mt-6 max-w-xl p-5">
         <h2 class="text-lg leading-none">Rincian</h2>
 

@@ -1,5 +1,3 @@
-{{-- Satu sumber untuk daftar menu. Dipakai sidebar di layar lebar dan panel
-     menu di layar sempit, jadi tidak ada dua daftar yang bisa berbeda isi. --}}
 <ul {{ $attributes->class('flex flex-col gap-1 text-sm font-medium') }}>
     @foreach ([
         ['dashboard', 'dashboard', 'Ringkasan'],

@@ -26,7 +26,6 @@ class AuthController extends Controller
             'password.required' => 'Kata sandi belum diisi.',
         ]);
 
-        // Tanpa pembatas ini, form login satu pemilik jadi pintu coba-coba sandi.
         $kunci = Str::transliterate(Str::lower($kredensial['email']).'|'.$request->ip());
 
         if (RateLimiter::tooManyAttempts($kunci, 5)) {

@@ -1,14 +1,11 @@
 @props(['daftar', 'satuan' => 'baris'])
 @php
-    // Jendela nomor halaman: maksimal 5, supaya deretannya tidak melebar di layar HP.
     $halamanAkhir = $daftar->lastPage();
     $halamanKini = $daftar->currentPage();
     $mulai = max(1, min($halamanKini - 2, $halamanAkhir - 4));
     $selesai = min($halamanAkhir, $mulai + 4);
 @endphp
 
-{{-- Paginator sendiri, bukan view bawaan Tailwind, supaya warnanya ikut palet
-     WarungKu tanpa harus mem-publish dan menambal view vendor. --}}
 @if ($daftar->total() > 0)
     <nav aria-label="Halaman" class="mt-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
         <p class="text-sm text-redup">

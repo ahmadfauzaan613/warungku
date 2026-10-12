@@ -12,7 +12,6 @@ export default defineConfig({
                 bunny('Instrument Sans', {
                     weights: [400, 500, 600],
                 }),
-                // Serif khusus judul, per DESIGN.md. Instrument Serif hanya punya 400.
                 bunny('Instrument Serif', {
                     weights: [400],
                 }),

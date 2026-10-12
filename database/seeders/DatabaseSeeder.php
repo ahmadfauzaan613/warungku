@@ -12,11 +12,6 @@ use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Barang dan transaksi di sini adalah DATA CONTOH, supaya Ringkasan dan Laporan
-     * tidak kosong saat pertama dibuka. Hapus semuanya dengan `php artisan migrate:fresh`
-     * lalu seed ulang hanya akun dan kategori kalau sudah mau dipakai sungguhan.
-     */
     public function run(): void
     {
         $pemilik = User::firstOrCreate(
@@ -57,8 +52,6 @@ class DatabaseSeeder extends Seeder
 
         $bisaDijual = $barang->filter(fn (Product $item) => $item->stock > 0);
 
-        // Transaksi contoh tujuh hari terakhir. Ditulis lewat jalur yang sama dengan
-        // kasir: stok berkurang, buku kas ikut terisi.
         foreach (range(6, 0) as $hariLalu) {
             foreach (range(1, random_int(2, 4)) as $ke) {
                 $waktu = now()->subDays($hariLalu)->setTime(random_int(7, 20), random_int(0, 59));

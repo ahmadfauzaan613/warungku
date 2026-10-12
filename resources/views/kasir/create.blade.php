@@ -1,6 +1,4 @@
 @php
-    // Kalau simpan gagal, baris yang sudah diisi dikembalikan apa adanya, termasuk
-    // baris yang ditambahkan lewat tombol "Tambah baris". Minimal tetap tiga baris.
     $baris = array_values(old('items', []));
     $baris = array_pad($baris, 3, ['product_id' => '', 'qty' => '']);
     $adaStok = $barang->contains(fn ($item) => $item->stock > 0);
@@ -33,8 +31,6 @@
             @csrf
 
             <div class="card overflow-hidden">
-                {{-- table-fixed supaya <select> dengan nama barang panjang tidak
-                     melebarkan tabel dan bikin halaman bisa digeser ke samping. --}}
                 <div class="relative overflow-x-auto">
                 <table class="w-full table-fixed text-sm">
                     <caption class="sr-only">Barang yang dibeli</caption>
@@ -103,7 +99,6 @@
             </div>
         </form>
 
-        {{-- Cetakan baris untuk tombol "Tambah baris". __NOMOR__ diganti JavaScript. --}}
         <template id="cetakan-baris">
             <tr data-baris class="border-b border-garis last:border-b-0">
                 <td class="px-3 py-2">

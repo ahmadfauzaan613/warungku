@@ -32,7 +32,6 @@ class CashEntry extends Model
         return $query->whereBetween('occurred_at', [$from, $to]);
     }
 
-    /** Pengeluaran yang belum terhitung sebagai modal barang terjual. */
     public function scopeOperational(Builder $query): Builder
     {
         return $query->where('type', self::OUT)->where('is_restock', false);

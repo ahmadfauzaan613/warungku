@@ -22,8 +22,6 @@ class ReportController extends Controller
             'sampai.after_or_equal' => 'Tanggal akhir tidak boleh lebih awal dari tanggal mulai.',
         ]);
 
-        // Ini halaman GET, jadi back() bisa melempar galat ke halaman lain yang
-        // tidak punya form tanggalnya. Dikembalikan ke laporan dengan rentang bawaan.
         if ($pemeriksa->fails()) {
             return redirect()->route('laporan.index')->withErrors($pemeriksa);
         }
@@ -38,9 +36,6 @@ class ReportController extends Controller
             ->selectRaw('COALESCE(SUM(sale_items.qty * sale_items.unit_cost), 0) as modal')
             ->first();
 
-        // Modal dibaca dari unit_cost yang tersimpan di tiap baris transaksi, bukan
-        // dari harga beli barang saat ini. Jadi laporan periode lalu tidak ikut
-        // berubah ketika harga beli diperbarui.
         $nilaiPenjualan = $this->uang($penjualan->nilai);
         $modal = $this->uang($penjualan->modal);
         $labaKotor = bcsub($nilaiPenjualan, $modal, 2);
@@ -75,10 +70,6 @@ class ReportController extends Controller
         ]);
     }
 
-    /**
-     * Angka dari SUM() bisa datang sebagai float (sqlite) atau string numeric
-     * (postgres). Dinormalkan dulu supaya bcsub tidak kebagian notasi ilmiah.
-     */
     private function uang(mixed $nilai): string
     {
         return sprintf('%.2f', (float) $nilai);

@@ -28,8 +28,6 @@
             <input class="input-field" id="kategori" name="kategori" type="text" list="daftar-kategori"
                    maxlength="80" value="{{ old('kategori', $barang->category?->name) }}"
                    placeholder="Misalnya: Minuman">
-            {{-- <datalist> bawaan browser: kategori baru cukup diketik, tidak perlu
-                 layar pengelolaan kategori tersendiri. --}}
             <datalist id="daftar-kategori">
                 @foreach ($kategori as $nama)
                     <option value="{{ $nama }}"></option>

@@ -9,14 +9,6 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-/**
- * Tiga hal yang paling mahal kalau rusak: stok yang tidak berkurang, penjualan
- * yang melebihi stok, dan laporan laba yang ikut berubah saat harga beli diperbarui.
- *
- * Catatan: test berjalan di sqlite in-memory (lihat phpunit.xml), sementara aplikasi
- * memakai PostgreSQL. Query di aplikasi sengaja dijaga portabel (whereLike, bukan
- * ILIKE) supaya keduanya berlaku.
- */
 class SaleTest extends TestCase
 {
     use RefreshDatabase;
@@ -40,7 +32,7 @@ class SaleTest extends TestCase
             'items' => [
                 ['product_id' => $teh->id, 'qty' => 3],
                 ['product_id' => $mi->id, 'qty' => 2],
-                // Baris kosong harus diabaikan, bukan bikin galat.
+
                 ['product_id' => '', 'qty' => ''],
             ],
         ]);
@@ -49,14 +41,12 @@ class SaleTest extends TestCase
 
         $response->assertRedirect(route('transaksi.show', $transaksi));
 
-        // 3 x 5000 + 2 x 3500 = 22000
         $this->assertSame('22000.00', $transaksi->total);
         $this->assertSame(7, $teh->fresh()->stock);
         $this->assertSame(2, $mi->fresh()->stock);
         $this->assertCount(2, $transaksi->items);
         $this->assertStringStartsWith('TRX-', $transaksi->code);
 
-        // Penjualan ikut tercatat di buku kas, sekali saja, dan terikat transaksinya.
         $kas = CashEntry::sole();
         $this->assertSame(CashEntry::IN, $kas->type);
         $this->assertSame('22000.00', $kas->amount);
@@ -80,7 +70,6 @@ class SaleTest extends TestCase
         $response->assertSessionHasErrors('items');
         $this->assertStringContainsString('Gula 1kg', session('errors')->first('items'));
 
-        // Seluruh transaksi dibatalkan, termasuk baris yang stoknya cukup.
         $this->assertSame(0, Sale::count());
         $this->assertSame(0, CashEntry::count());
         $this->assertSame(10, $cukup->fresh()->stock);
@@ -97,14 +86,13 @@ class SaleTest extends TestCase
             'items' => [['product_id' => $barang->id, 'qty' => 2]],
         ])->assertSessionHasNoErrors();
 
-        // Harga beli naik setelah transaksinya terjadi.
         $barang->update(['purchase_price' => 1400]);
 
         $laporan = $this->get(route('laporan.index'));
 
         $laporan->assertOk();
         $this->assertSame('3000.00', $laporan->viewData('nilaiPenjualan'));
-        // 2 x 1000, bukan 2 x 1400.
+
         $this->assertSame('2000.00', $laporan->viewData('modal'));
         $this->assertSame('1000.00', $laporan->viewData('labaKotor'));
     }
@@ -119,7 +107,6 @@ class SaleTest extends TestCase
             'items' => [['product_id' => $barang->id, 'qty' => 2]],
         ])->assertSessionHasNoErrors();
 
-        // Belanja stok 5 pcs, dicatat juga di buku kas.
         $this->post(route('stok.store'), [
             'product_id' => $barang->id,
             'jumlah' => 5,
@@ -130,20 +117,14 @@ class SaleTest extends TestCase
 
         $laporan = $this->get(route('laporan.index'));
 
-        // Laba kotor 3000 - 2000 = 1000, dan belanja stok tidak dikurangkan lagi.
         $this->assertSame('1000.00', $laporan->viewData('labaKotor'));
         $this->assertSame('0.00', $laporan->viewData('pengeluaranLain'));
         $this->assertSame('1000.00', $laporan->viewData('labaBersih'));
 
-        // Tapi di buku kas uangnya memang keluar: 5 x 1000 = 5000.
         $this->assertSame('5000.00', $laporan->viewData('kasKeluar'));
         $this->assertSame('-2000.00', $laporan->viewData('selisihKas'));
     }
 
-    /**
-     * Pengganti klik manual: kalau salah satu view tidak bisa dirender, test ini gagal.
-     * Inilah yang menangkap layout yang salah tempat.
-     */
     public function test_setiap_halaman_bisa_dibuka(): void
     {
         $this->masuk();
@@ -211,7 +192,6 @@ class SaleTest extends TestCase
             $this->assertCount(5, $dua->viewData('barang'), "halaman 2 $alamat");
         }
 
-        // Form tambah stok tetap memuat semua barang, bukan cuma yang di halaman ini.
         $this->assertCount(25, $this->get(route('stok.index'))->viewData('pilihan'));
     }
 

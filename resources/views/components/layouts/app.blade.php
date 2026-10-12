@@ -15,8 +15,6 @@
     </a>
 
     <div class="lg:flex lg:items-start">
-        {{-- Sidebar layar lebar. Sticky, bukan fixed, jadi isinya tidak perlu
-             diberi padding kiri yang harus dijaga sama dengan lebar sidebar. --}}
         <aside class="sticky top-0 hidden h-screen w-60 shrink-0 flex-col border-r-2 border-tinta bg-kuning lg:flex">
             <a href="{{ route('dashboard') }}"
                class="flex min-h-11 items-center border-b border-kuning-tua px-5 py-4 font-serif text-2xl leading-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-tinta">
@@ -34,10 +32,6 @@
         </aside>
 
         <div class="min-w-0 grow">
-            {{-- Layar sempit: baris atas dengan menu yang bisa dibuka. Pakai
-                 <details> bawaan, jadi tetap jalan tanpa JavaScript dan bisa
-                 dibuka dengan Enter atau Spasi. Labelnya ditulis "Menu", bukan
-                 cuma ikon garis tiga. --}}
             <header class="border-b-2 border-tinta bg-kuning lg:hidden">
                 <details class="group">
                     <summary class="flex min-h-11 cursor-pointer list-none flex-wrap items-center justify-between gap-3 px-4 py-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-tinta">
@@ -81,7 +75,6 @@
         </div>
     </div>
 
-    {{-- <dialog> bawaan browser: Escape menutupnya dan fokus kembali sendiri. --}}
     <dialog id="dialog-konfirmasi" class="max-w-sm rounded-kartu border border-tinta bg-kertas p-0 text-tinta">
         <form method="dialog" class="p-5">
             <h2 class="text-xl">Hapus data ini?</h2>

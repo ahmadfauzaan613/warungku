@@ -12,8 +12,7 @@ class StockController extends Controller
     public function index()
     {
         return view('stok.index', [
-            // Yang stoknya paling mendesak naik ke atas, karena itulah keputusan
-            // yang diambil pemilik warung di halaman ini.
+
             'barang' => Product::with('category')
                 ->orderByRaw('CASE WHEN stock = 0 THEN 0 WHEN stock <= low_stock_threshold THEN 1 ELSE 2 END')
                 ->orderBy('stock')
@@ -46,8 +45,7 @@ class StockController extends Controller
                     'type' => CashEntry::OUT,
                     'amount' => $biaya,
                     'note' => "Belanja stok {$barang->name} {$data['jumlah']} pcs",
-                    // Ditandai belanja stok supaya tidak dihitung dua kali di laporan:
-                    // modalnya sudah masuk hitungan laba lewat unit_cost saat terjual.
+
                     'is_restock' => true,
                     'occurred_at' => now(),
                 ]);
@@ -56,9 +54,6 @@ class StockController extends Controller
             return $barang;
         });
 
-        // ponytail: penambahan stok tidak punya tabel riwayat sendiri, cuma mengubah
-        // products.stock. Kalau nanti perlu jejak audit per penambahan, tambahkan
-        // tabel stock_movements dan jadikan products.stock hasil penjumlahannya.
         return redirect()->route('stok.index')
             ->with('sukses', "Stok {$barang->name} sekarang {$barang->stock}.");
     }
