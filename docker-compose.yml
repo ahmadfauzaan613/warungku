@@ -1,0 +1,29 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: warungku-app
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      APP_KEY: base64:FXeGdT/dWrJOdb6cqDxf0IUD0ZOHpb0+6iB9L1C4o8k=
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: warungku
+      DB_USERNAME: warungku
+      DB_PASSWORD: warungku
+      SESSION_DRIVER: database
+      CACHE_STORE: database
+      QUEUE_CONNECTION: database
+    ports:
+      - "8000:8000"
+    networks:
+      - warungku
+
+networks:
+  warungku:
+    external: true
+    name: warungku

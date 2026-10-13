@@ -1,0 +1,28 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: warungku-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: warungku
+      MYSQL_USER: warungku
+      MYSQL_PASSWORD: warungku
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - warungku_mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    networks:
+      - warungku
+
+volumes:
+  warungku_mysql_data:
+
+networks:
+  warungku:
+    name: warungku
